@@ -1,19 +1,82 @@
-<h3 class="first">Basic</h3>
-<p-table [value]="cars">
+<h3 class="first">DROPWDOWN</h3>
+<!-- <p-dropdown #dd [options]="cities" optionLabel="name" [(ngModel)]="seleccion_1" [dropdownIcon]="dropdownIcon" (onShow)="obtenerListado()" [showClear]="true">
+
+</p-dropdown>
+<p-dropdown [options]="cities2" placeholder="SELECCIONAR" [(ngModel)]="seleccion_2">
+    <ng-template let-item pTemplate="selectedItem">
+        <span>{{item.label}} - {{item.value}}</span>
+    </ng-template>
+    <ng-template let-car pTemplate="item">
+        <div class="ui-helper-clearfix" style="position: relative;height:25px;background: red;">
+            <span>{{car.label}} {{car.value}}</span>
+        </div>
+    </ng-template>
+</p-dropdown>
+
+<p>{{select_fisrt}} {{select_2()}}</p>
+<p>{{seleccion_2.length > 0 ? seleccion_2 : 'SELECCIONAR'}}</p>
+<p><button (click)="showInfo()">MOSTRAR EN CONSOLA</button></p>
+<p><button (click)="dd.focus()">ENFOCAR</button></p> -->
+
+<p><button (click)="showInfoList()">Obtener listado</button></p>
+<p-table #dt [value]="cars" [(selection)]="selectedCar" dataKey="vin">
     <ng-template pTemplate="header">
         <tr>
-            <th>Vin</th>
-            <th>Year</th>
-            <th>Brand</th>
-            <th>Color</th>
+            <th style="width: 3em">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th [pSortableColumn]="'vin'">Vin</th>
+            <th [pSortableColumn]="'year'">Year</th>
+            <th>aceptado</th>
+            <th>no aceptado</th>
+            <th>Estado</th>
+            <th>Ingresar</th>
+            <th>Obtener</th>
+        </tr>
+        <tr>
+            <th style="width: 3em">
+
+            </th>
+            <th>
+                <input pInputText type="text" (input)="dt.filter($event.target.value, 'vin', 'contains')">
+            </th>
+            <th><input pInputText type="text" (input)="dt.filter($event.target.value, 'year', 'contains')"></th>
+            <th></th>
+            <th></th>
+            <!--  -->
+            <th>
+                <p-checkbox binary="true" label="ACTIVAR" (onChange)="dt.filter($event.checked, 'estado', 'equals')"></p-checkbox>
+            </th>
+            <th></th>
+            <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-car>
-        <tr>
-            <td>{{car.vin}}</td>
-            <td>{{car.year}}</td>
-            <td>{{car.brand}}</td>
-            <td>{{car.color}}</td>
+    <ng-template pTemplate="body" let-carro let-index>
+        <tr [pSelectableRow]="carro">
+            <td>
+                <p-tableCheckbox [value]="carro"></p-tableCheckbox>
+                <!-- <p-tableRadioButton [value]="carro"></p-tableRadioButton> -->
+            </td>
+            <td>{{carro.vin}}</td>
+            <td>{{carro.year}}</td>
+            <td>
+                <p-radioButton name="group-{{carro.vin}}" value="ACCEPTED" label="ACEPTADO" [(ngModel)]="carro.url_img" inputId="opt1"></p-radioButton>
+            </td>
+            <td>
+                <p-radioButton name="group1-{{carro.vin}}" value="NOTACCEPTED" label="NO ACEPTADO" [(ngModel)]="carro.url_img" inputId="opt2"></p-radioButton>
+            </td>
+            <td>
+                <i *ngIf="carro.estado" class="pi pi-check" style="font-size: 3em"></i>
+                <i *ngIf="!carro.estado" class="pi pi-times" style="font-size: 3em"></i>
+            </td>
+            <td>
+                <p-checkbox [(ngModel)]="carro.estado" binary="true" label="ACTIVAR"></p-checkbox>
+                <!-- <p-checkbox name="groupname" [value]="ACTIVO" [(ngModel)]="carro.url_img"></p-checkbox> -->
+                <!-- <input [(ngModel)]="carro.url_img" type="text" pInputText style="width: 100%;" /> -->
+            </td>
+            <td>
+                <button (click)="obtenerInfo(carro)">obtener</button>
+            </td>
         </tr>
     </ng-template>
 </p-table>
